@@ -43,7 +43,7 @@ func main() {
 			fmt.Printf("the whole bookings is %v\n", bookings)
 			fmt.Printf("User %v %v booked %v tickets and remaining tickets are %v\n", userName, lastName, userTickets, remainingTickets)
 		
-			sendTickets(userTickets, userName, lastName, email)
+			go sendTickets(userTickets, userName, lastName, email)
 
 			var firstNames []string = getFirstNames(bookings)
 			fmt.Printf("These are all our bookings: %v\n", firstNames)
