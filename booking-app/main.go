@@ -19,10 +19,11 @@ func main() {
 
 		if isValidEmail && isValidName && isValidTicketNumber {
 			
-			bookTicket(remainingTickets, userTickets, bookings, userName, lastName)
+			var bookings []string = bookTicket(remainingTickets, userTickets, bookings, userName, lastName)
 
 
-			getFirstNames(bookings)
+			var firstNames []string = getFirstNames(bookings)
+			fmt.Printf("These are all our bookings: %v\n", firstNames)
 
 			if remainingTickets == 0 {
 				fmt.Println("Tickets are sold out")
@@ -49,13 +50,13 @@ func greetUser(confName string, confTickets int, remainingTickets uint) {
 }
 
 // TODO Fix this function
-func getFirstNames(bookings []string) {
+func getFirstNames(bookings []string) []string{
 	firstNames := []string{}
 	for _, booking := range bookings {
 		var names = strings.Fields(booking)
 		firstNames = append(firstNames, names[0])
 	}
-	fmt.Printf("These are all our bookings: %v\n", firstNames)
+	return firstNames
 }
 
 func inputValidation(userName string,lastName string,email string,userTickets uint,remainingTickets uint) (bool, bool, bool) {
@@ -84,9 +85,10 @@ func getUserInfo() (string, string, uint, string) {
 	return userName,lastName, userTickets,email
 }
 
-func bookTicket(remainingTickets uint, userTickets uint , bookings []string, userName string, lastName string) {
+func bookTicket(remainingTickets uint, userTickets uint , bookings []string, userName string, lastName string) []string{
 	remainingTickets = remainingTickets - userTickets
 	bookings = append(bookings, userName+" "+lastName)
 
 	fmt.Printf("User %v %v booked %v tickets and remaining tickets are %v\n", userName, lastName, userTickets, remainingTickets)
+	return bookings
 }
