@@ -1,15 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"strings"
 	"booking-app/helper"
+	"fmt"
+	"strconv"
 )
 
 const conferenceTickets int = 50
-var bookings []string
 var remainingTickets uint = 50
+var bookings = make([]map[string] string, 0)
 var conferenceName string = "Go Conference"
+
 
 func main() {
 
@@ -20,9 +21,19 @@ func main() {
 		var isValidEmail, isValidName, isValidTicketNumber = helper.InputValidation(userName,lastName,email,userTickets,remainingTickets)
 
 		if isValidEmail && isValidName && isValidTicketNumber {
-			
-			var bookings []string = bookTicket(userTickets, userName, lastName)
+			remainingTickets = remainingTickets - userTickets
 
+			var userData = make(map[string] string)
+			userData["firstName"] = userName
+			userData["lastName"] = lastName
+			userData["email"] = email
+			userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
+			bookings = append(bookings, userData)
+
+			fmt.Printf("the whole bookings is %v\n", bookings)
+			fmt.Printf("User %v %v booked %v tickets and remaining tickets are %v\n", userName, lastName, userTickets, remainingTickets)
+			
 
 			var firstNames []string = getFirstNames(bookings)
 			fmt.Printf("These are all our bookings: %v\n", firstNames)
@@ -51,11 +62,10 @@ func greetUser() {
 	fmt.Println("Get your tickets here to attend")
 }
 
-func getFirstNames(bookings []string) []string{
+func getFirstNames(bookings []map[string] string) []string{
 	firstNames := []string{}
 	for _, booking := range bookings {
-		var names = strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"])
 	}
 	return firstNames
 }
@@ -76,12 +86,4 @@ func getUserInfo() (string, string, uint, string) {
 	fmt.Scan(&userTickets)
 
 	return userName,lastName, userTickets,email
-}
-
-func bookTicket(userTickets uint , userName string, lastName string) []string{
-	remainingTickets = remainingTickets - userTickets
-	bookings = append(bookings, userName+" "+lastName)
-
-	fmt.Printf("User %v %v booked %v tickets and remaining tickets are %v\n", userName, lastName, userTickets, remainingTickets)
-	return bookings
 }
