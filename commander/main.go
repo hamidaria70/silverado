@@ -1,13 +1,12 @@
 package main
 
 import (
-	//	"os"
+	"commander/config"
 	"context"
 	"fmt"
 	"log"
-
-	//	"io/ioutil"
 	"path/filepath"
+
 	//	"k8s.io/client-go"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -16,10 +15,10 @@ import (
 )
 
 func main() {
-	//	kubeConfig := getConfig()
-	//	fmt.Printf("Path to the kubeConfig is %v.\n", kubeConfig)
-	//	kubeConfigData := showConfig(kubeConfig)
-	//	fmt.Println(kubeConfigData)
+	kubeConfigFile := config.GetConfig()
+	fmt.Printf("Path to the kubeConfig is %v.\n", kubeConfigFile)
+	kubeConfigData := config.ShowConfig(kubeConfigFile)
+	fmt.Println(kubeConfigData)
 	kubeConfig, err := clientcmd.BuildConfigFromFlags(
 		"", filepath.Join(homedir.HomeDir(), ".kube", "config"),
 	)
@@ -43,19 +42,3 @@ func checkErr(err error) {
 		log.Fatal(err)
 	}
 }
-
-//func getConfig() string {
-//kubeConfig := filepath.Join(
-//os.Getenv("HOME"), ".kube", "config",
-//)
-//return kubeConfig
-//}
-
-//func showConfig(kubeConfig string) string {
-//data, err := ioutil.ReadFile(kubeConfig)
-
-//if err != nil {
-//fmt.Println("File reading error", err)
-//}
-//return string(data)
-//}
