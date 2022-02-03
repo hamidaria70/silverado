@@ -33,11 +33,10 @@ func main() {
 		fmt.Println(nameSpace.Name)
 	}
 	podList, err := k8s.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
+	checkErr(err)
 	for _, podName := range podList.Items {
 		fmt.Println(podName.Name)
 	}
-	//podList, err := clientset.CoreV1().pods("").List(context.Background(), metav1.ListOptions{})
-	//checkErr(err)
 }
 
 func checkErr(err error) {
