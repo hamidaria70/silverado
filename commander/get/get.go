@@ -22,6 +22,6 @@ func GetPod(k8s *kubernetes.Clientset) {
 	podList, err := k8s.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
 	error.CheckErr(err)
 	for _, podName := range podList.Items {
-		fmt.Println(podName.Name)
+		fmt.Println(podName)
 	}
 }
