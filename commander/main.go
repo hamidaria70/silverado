@@ -25,8 +25,9 @@ func main() {
 	k8s, err := kubernetes.NewForConfig(kubeConfig)
 	error.CheckErr(err)
 
+	nameSpace, appName := get.UserInput()
 	get.GetNode(k8s)
 
-	get.GetPod(k8s)
+	get.GetPod(k8s, nameSpace, appName)
 
 }

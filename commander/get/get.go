@@ -18,10 +18,27 @@ func GetNode(k8s *kubernetes.Clientset) {
 	}
 }
 
-func GetPod(k8s *kubernetes.Clientset) {
+func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string) {
 	podList, err := k8s.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
+
+	fmt.Println("#############################")
+	fmt.Println(podList)
+	fmt.Println("#############################")
+
 	error.CheckErr(err)
 	for _, podName := range podList.Items {
-		fmt.Println(podName)
+		fmt.Println(podName.Name)
 	}
+}
+
+func UserInput() (string, string) {
+	var nameSpace string
+	var appName string
+
+	fmt.Println("Enter the target namespace:")
+	fmt.Scan(&nameSpace)
+	fmt.Println("Enter the application name:")
+	fmt.Scan(&appName)
+
+	return nameSpace, appName
 }
