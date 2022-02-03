@@ -20,11 +20,6 @@ func GetNode(k8s *kubernetes.Clientset) {
 
 func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string) {
 	podList, err := k8s.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
-
-	fmt.Println("#############################")
-	fmt.Println(podList)
-	fmt.Println("#############################")
-
 	error.CheckErr(err)
 	for _, podName := range podList.Items {
 		fmt.Println(podName.Name)
