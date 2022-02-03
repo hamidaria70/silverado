@@ -7,7 +7,6 @@ import (
 	"log"
 	"path/filepath"
 
-	//	"k8s.io/client-go"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -33,8 +32,12 @@ func main() {
 	for _, nameSpace := range nodeList.Items {
 		fmt.Println(nameSpace.Name)
 	}
-	//	podList , err := clientset.CoreV1().pods("").List(context.Background(),metav1.ListOptions{})
-	//	checkErr(err)
+	podList, err := k8s.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
+	for _, podName := range podList.Items {
+		fmt.Println(podName.Name)
+	}
+	//podList, err := clientset.CoreV1().pods("").List(context.Background(), metav1.ListOptions{})
+	//checkErr(err)
 }
 
 func checkErr(err error) {
