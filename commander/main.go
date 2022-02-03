@@ -2,12 +2,11 @@ package main
 
 import (
 	"commander/config"
-	"context"
+	"commander/error"
+	"commander/get"
 	"fmt"
-	"log"
 	"path/filepath"
 
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
@@ -21,26 +20,13 @@ func main() {
 	kubeConfig, err := clientcmd.BuildConfigFromFlags(
 		"", filepath.Join(homedir.HomeDir(), ".kube", "config"),
 	)
-	checkErr(err)
+	error.CheckErr(err)
 
 	k8s, err := kubernetes.NewForConfig(kubeConfig)
-	checkErr(err)
+	error.CheckErr(err)
 
-	nodeList, err := k8s.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
-	checkErr(err)
+	get.GetNode(k8s)
 
-	for _, nameSpace := range nodeList.Items {
-		fmt.Println(nameSpace.Name)
-	}
-	podList, err := k8s.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
-	checkErr(err)
-	for _, podName := range podList.Items {
-		fmt.Println(podName.Name)
-	}
-}
+	get.GetPod(k8s)
 
-func checkErr(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
 }
