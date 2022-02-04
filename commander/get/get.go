@@ -16,10 +16,10 @@ func GetNameSpaces(k8s *kubernetes.Clientset) []string {
 
 	for _, nameSpace := range nameSpaceList.Items {
 		nameSpaces = append(nameSpaces, nameSpace.Name)
-		fmt.Println("********from fucntion**********")
-		fmt.Println(nameSpaces)
-		fmt.Println("********from fucntion**********")
 	}
+	fmt.Println("********from fucntion**********")
+	fmt.Println(nameSpaces)
+	fmt.Println("********from fucntion**********")
 	return nameSpaces
 }
 
