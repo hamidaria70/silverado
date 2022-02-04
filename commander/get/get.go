@@ -21,19 +21,11 @@ func GetNameSpaces(k8s *kubernetes.Clientset) []string {
 }
 
 func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string, nameSpaces []string) {
-
-	for _, items := range nameSpaces {
-		if items == nameSpace {
-			podList, err := k8s.CoreV1().Pods(nameSpace).List(context.Background(), metav1.ListOptions{})
-			error.CheckErr(err)
-			for _, podName := range podList.Items {
-				fmt.Println(podName.Name)
-			}
-		} else {
-			break
-		}
+	podList, err := k8s.CoreV1().Pods(nameSpace).List(context.Background(), metav1.ListOptions{})
+	error.CheckErr(err)
+	for _, podName := range podList.Items {
+		fmt.Println(podName.Name)
 	}
-
 }
 
 func UserInput() (string, string) {
@@ -46,4 +38,14 @@ func UserInput() (string, string) {
 	fmt.Scan(&appName)
 
 	return nameSpace, appName
+}
+
+func NsChecker(nameSpace string, nameSpaces []string) {
+	for _, name := range nameSpaces {
+		if nameSpace == name {
+			fmt.Printf("%v is in slice.\n", nameSpace)
+		} else {
+			fmt.Println("Wrong namespace")
+		}
+	}
 }

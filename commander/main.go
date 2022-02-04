@@ -21,6 +21,7 @@ func main() {
 
 	nameSpace, appName := get.UserInput()
 	nameSpaces := get.GetNameSpaces(k8s)
+	get.NsChecker(nameSpace, nameSpaces)
 	get.GetPod(k8s, nameSpace, appName, nameSpaces)
 
 }
