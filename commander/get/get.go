@@ -17,13 +17,18 @@ func GetNameSpaces(k8s *kubernetes.Clientset) []string {
 	for _, nameSpace := range nameSpaceList.Items {
 		nameSpaces = append(nameSpaces, nameSpace.Name)
 	}
-	fmt.Println("********from fucntion**********")
-	fmt.Println(nameSpaces)
-	fmt.Println("********from fucntion**********")
 	return nameSpaces
 }
 
-func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string) {
+func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string, nameSpaces []string) {
+
+	for _, items := range nameSpaces {
+		if items == nameSpace {
+			return
+		}
+		fmt.Println("it is not valid")
+	}
+
 	podList, err := k8s.CoreV1().Pods(nameSpace).List(context.Background(), metav1.ListOptions{})
 	error.CheckErr(err)
 	for _, podName := range podList.Items {
