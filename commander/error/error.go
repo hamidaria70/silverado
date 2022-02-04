@@ -7,3 +7,7 @@ func CheckErr(err error) {
 		log.Fatal(err)
 	}
 }
+
+func NsCheckErr(nameSpace string) {
+	log.Fatalf("%v is not in the namespaces list", nameSpace)
+}

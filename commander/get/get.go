@@ -47,4 +47,5 @@ func NsChecker(nameSpace string, nameSpaces []string) {
 			break
 		}
 	}
+	error.NsCheckErr(nameSpace)
 }
