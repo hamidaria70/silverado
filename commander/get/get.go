@@ -24,16 +24,16 @@ func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string, nameSpa
 
 	for _, items := range nameSpaces {
 		if items == nameSpace {
-			return
+			podList, err := k8s.CoreV1().Pods(nameSpace).List(context.Background(), metav1.ListOptions{})
+			error.CheckErr(err)
+			for _, podName := range podList.Items {
+				fmt.Println(podName.Name)
+			}
+		} else {
+			fmt.Println("it is not valid")
 		}
-		fmt.Println("it is not valid")
 	}
 
-	podList, err := k8s.CoreV1().Pods(nameSpace).List(context.Background(), metav1.ListOptions{})
-	error.CheckErr(err)
-	for _, podName := range podList.Items {
-		fmt.Println(podName.Name)
-	}
 }
 
 func UserInput() (string, string) {
