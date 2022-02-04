@@ -9,17 +9,22 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func GetNode(k8s *kubernetes.Clientset) {
-	nodeList, err := k8s.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
+func GetNameSpaces(k8s *kubernetes.Clientset) []string {
+	nameSpaces := []string{}
+	nameSpaceList, err := k8s.CoreV1().Namespaces().List(context.Background(), metav1.ListOptions{})
 	error.CheckErr(err)
 
-	for _, nameSpace := range nodeList.Items {
-		fmt.Println(nameSpace.Name)
+	for _, nameSpace := range nameSpaceList.Items {
+		nameSpaces = append(nameSpaces, nameSpace.Name)
+		fmt.Println("********from fucntion**********")
+		fmt.Println(nameSpaces)
+		fmt.Println("********from fucntion**********")
 	}
+	return nameSpaces
 }
 
 func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string) {
-	podList, err := k8s.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
+	podList, err := k8s.CoreV1().Pods(nameSpace).List(context.Background(), metav1.ListOptions{})
 	error.CheckErr(err)
 	for _, podName := range podList.Items {
 		fmt.Println(podName.Name)

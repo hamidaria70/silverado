@@ -3,6 +3,7 @@ package main
 import (
 	"commander/error"
 	"commander/get"
+	"fmt"
 	"path/filepath"
 
 	"k8s.io/client-go/kubernetes"
@@ -20,7 +21,10 @@ func main() {
 	error.CheckErr(err)
 
 	nameSpace, appName := get.UserInput()
-	get.GetNode(k8s)
+	nameSpaces := get.GetNameSpaces(k8s)
+	fmt.Println("************from main***************")
+	fmt.Println(nameSpaces)
+	fmt.Println("************from main***************")
 
 	get.GetPod(k8s, nameSpace, appName)
 
