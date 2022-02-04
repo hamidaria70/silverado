@@ -20,7 +20,7 @@ func GetNameSpaces(k8s *kubernetes.Clientset) []string {
 	return nameSpaces
 }
 
-func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string, nameSpaces []string) bool {
+func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string, nameSpaces []string) {
 
 	for _, items := range nameSpaces {
 		if items == nameSpace {
@@ -29,8 +29,9 @@ func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string, nameSpa
 			for _, podName := range podList.Items {
 				fmt.Println(podName.Name)
 			}
+		} else {
+			break
 		}
-		return false
 	}
 
 }
