@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/go-redis/redis"
 )
 
 func main() {
@@ -17,4 +18,20 @@ func main() {
 	for key, val := range claims {
 		fmt.Printf("Key: %v , value: %v\n", key, val)
 	}
+
+	fmt.Println("Go Redis Tutorial")
+
+	client := redis.NewClient(&redis.Options{
+		Addr: "192.168.1.90:6379",
+	})
+
+	pong, err := client.Ping().Result()
+	fmt.Println(pong, err)
+
+	val, err := client.HGetAll("auth:sessions").Result()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(val)
 }
