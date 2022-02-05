@@ -8,6 +8,8 @@ func CheckErr(err error) {
 	}
 }
 
-func NsCheckErr(nameSpace string) {
-	log.Fatalf("%v is not in the namespaces list", nameSpace)
+func NameSpaceCheckErr(nameSpace string, booler bool) {
+	if booler == false {
+		log.Fatalf("'%v' Is Not In The Namespaces List", nameSpace)
+	}
 }

@@ -21,7 +21,6 @@ func GetNameSpaces(k8s *kubernetes.Clientset) []string {
 }
 
 func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string, nameSpaces []string) {
-	NsChecker(nameSpace, nameSpaces)
 	podList, err := k8s.CoreV1().Pods(nameSpace).List(context.Background(), metav1.ListOptions{})
 	error.CheckErr(err)
 	for _, podName := range podList.Items {
@@ -29,23 +28,26 @@ func GetPod(k8s *kubernetes.Clientset, nameSpace string, appName string, nameSpa
 	}
 }
 
-func UserInput() (string, string) {
+func UserInput(nameSpaces []string) (string, string) {
 	var nameSpace string
 	var appName string
 
 	fmt.Print("Enter the target namespace: ")
 	fmt.Scan(&nameSpace)
+	NameSpaceChecker(nameSpace, nameSpaces)
 	fmt.Print("Enter the application name: ")
 	fmt.Scan(&appName)
 
 	return nameSpace, appName
 }
 
-func NsChecker(nameSpace string, nameSpaces []string) {
+func NameSpaceChecker(nameSpace string, nameSpaces []string) {
+	booler := false
 	for _, name := range nameSpaces {
 		if nameSpace == name {
+			booler = true
 			break
 		}
-		//TODO handling NsCheckErr function here
 	}
+	error.NameSpaceCheckErr(nameSpace, booler)
 }

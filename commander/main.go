@@ -19,9 +19,9 @@ func main() {
 	k8s, err := kubernetes.NewForConfig(kubeConfig)
 	error.CheckErr(err)
 
-	nameSpace, appName := get.UserInput()
 	nameSpaces := get.GetNameSpaces(k8s)
-	get.NsChecker(nameSpace, nameSpaces)
+	nameSpace, appName := get.UserInput(nameSpaces)
+	get.NameSpaceChecker(nameSpace, nameSpaces)
 	get.GetPod(k8s, nameSpace, appName, nameSpaces)
 
 }
