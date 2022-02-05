@@ -33,9 +33,9 @@ func UserInput() (string, string) {
 	var nameSpace string
 	var appName string
 
-	fmt.Println("Enter the target namespace:")
+	fmt.Print("Enter the target namespace: ")
 	fmt.Scan(&nameSpace)
-	fmt.Println("Enter the application name:")
+	fmt.Print("Enter the application name: ")
 	fmt.Scan(&appName)
 
 	return nameSpace, appName
@@ -46,6 +46,6 @@ func NsChecker(nameSpace string, nameSpaces []string) {
 		if nameSpace == name {
 			break
 		}
+		//TODO handling NsCheckErr function here
 	}
-	error.NsCheckErr(nameSpace)
 }
