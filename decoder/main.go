@@ -9,16 +9,7 @@ import (
 )
 
 func main() {
-	tokenString := ""
 	claims := jwt.MapClaims{}
-
-	jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(tokenString), nil
-	})
-
-	for key, val := range claims {
-		fmt.Printf("Key: %v , value: %v\n", key, val)
-	}
 
 	fmt.Println("Go Redis Tutorial")
 
@@ -33,5 +24,14 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(strings.TrimSpace(strings.Split(val[0], "Bearer")[1]))
+	tokenString := strings.Trim(strings.TrimSpace(strings.Split(val[0], "Bearer")[1]), "\"}")
+
+	jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(tokenString), nil
+	})
+
+	for key, val := range claims {
+		fmt.Printf("Key: %v , value: %v\n", key, val)
+	}
+
 }
