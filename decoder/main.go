@@ -28,10 +28,12 @@ func main() {
 	pong, err := client.Ping().Result()
 	fmt.Println(pong, err)
 
-	val, err := client.HGetAll("auth:sessions").Result()
+	val, err := client.LRange("test", -1, -1).Result()
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(val)
+	for key2, val2 := range val {
+		fmt.Printf("key2: %v ,val2: %v\n", key2, val2)
+	}
 }
