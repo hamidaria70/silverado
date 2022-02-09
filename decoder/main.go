@@ -33,7 +33,5 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	out := strings.TrimLeft(strings.TrimRight(val[0], " "), "\"")
-	fmt.Println(out)
+	fmt.Println(strings.TrimSpace(strings.Split(val[0], "Bearer")[1]))
 }
