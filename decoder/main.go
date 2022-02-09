@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis"
@@ -33,8 +34,6 @@ func main() {
 		fmt.Println(err)
 	}
 
-	runes := []rune(val[1])
-	safeSubstring := string(runes[1:3])
-
-	fmt.Println(safeSubstring)
+	out := strings.TrimLeft(strings.TrimRight(val[0], " "), "\"")
+	fmt.Println(out)
 }
