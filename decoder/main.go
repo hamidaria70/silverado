@@ -32,8 +32,6 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	for key2, val2 := range val {
-		fmt.Printf("key2: %v ,val2: %v\n", key2, val2)
-	}
+	val = append(val, "test")
+	fmt.Println(val)
 }
