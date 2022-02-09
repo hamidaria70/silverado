@@ -32,6 +32,9 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	val = append(val, "test")
-	fmt.Println(val)
+
+	runes := []rune(val[1])
+	safeSubstring := string(runes[1:3])
+
+	fmt.Println(safeSubstring)
 }
