@@ -28,7 +28,7 @@ func main() {
 	}
 
 	for _, value := range val {
-		if strings.Contains(value, "Authorization") {
+		if strings.Contains(value, "Authorization") && !strings.Contains(value, "Authorization=-") {
 			values = append(values, value)
 		}
 	}
@@ -36,7 +36,6 @@ func main() {
 	fmt.Printf("The length of val slice is %d.\n", len(val))
 	fmt.Printf("The length of values slice is %d.\n", len(values))
 	for _, element := range val {
-		fmt.Println(element)
 		tokenSlice = append(tokenSlice, strings.Trim(strings.TrimSpace(strings.Split(element, "Bearer")[1]), "\"}"))
 	}
 
@@ -44,10 +43,10 @@ func main() {
 		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(tokenString), nil
 		})
-	}
-
-	for key, val := range claims {
-		fmt.Printf("Key: %v , value: %v\n", key, val)
+		fmt.Println(tokenString)
+		for key, val := range claims {
+			fmt.Printf("Key: %v , value: %v\n", key, val)
+		}
 	}
 
 }
