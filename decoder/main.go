@@ -35,7 +35,7 @@ func main() {
 
 	fmt.Printf("The length of val slice is %d.\n", len(val))
 	fmt.Printf("The length of values slice is %d.\n", len(values))
-	for _, element := range val {
+	for _, element := range values {
 		tokenSlice = append(tokenSlice, strings.Trim(strings.TrimSpace(strings.Split(element, "Bearer")[1]), "\"}"))
 	}
 
