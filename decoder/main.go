@@ -11,6 +11,7 @@ import (
 func main() {
 	claims := jwt.MapClaims{}
 	tokenSlice := []string{}
+	values := []string{}
 
 	fmt.Println("Go Redis Tutorial")
 
@@ -26,8 +27,16 @@ func main() {
 		fmt.Println(err)
 	}
 
+	for _, value := range val {
+		if strings.Contains(value, "Authorizarion") {
+			values = append(values, value)
+		}
+	}
+
 	fmt.Printf("The length of val slice is %d.\n", len(val))
+	fmt.Printf("The length of values slice is %d.\n", len(values))
 	for _, element := range val {
+		fmt.Println(element)
 		tokenSlice = append(tokenSlice, strings.Trim(strings.TrimSpace(strings.Split(element, "Bearer")[1]), "\"}"))
 	}
 
