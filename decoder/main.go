@@ -31,9 +31,9 @@ func main() {
 		tokenSlice = append(tokenSlice, strings.Trim(strings.TrimSpace(strings.Split(element, "Bearer")[1]), "\"}"))
 	}
 
-	for _, token := range tokenSlice {
-		jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte(token), nil
+	for _, tokenString := range tokenSlice {
+		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+			return []byte(tokenString), nil
 		})
 	}
 
