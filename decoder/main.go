@@ -28,7 +28,7 @@ func main() {
 	}
 
 	for _, value := range val {
-		if strings.Contains(value, "Authorizarion") {
+		if strings.Contains(value, "Authorization") {
 			values = append(values, value)
 		}
 	}
