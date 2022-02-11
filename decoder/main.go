@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
-	//"github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis"
 )
 
 func main() {
-	//claims := jwt.MapClaims{}
+	claims := jwt.MapClaims{}
 	tokenSlice := []string{}
 	values := []string{}
 
@@ -42,15 +43,16 @@ func main() {
 	dup_map := duplicateCount(tokenSlice)
 
 	fmt.Println(dup_map)
-	//	for _, tokenString := range tokenSlice {
-	//		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-	//			return []byte(tokenString), nil
-	//		})
-	//		fmt.Println(tokenString)
-	//		for key, val := range claims {
-	//			fmt.Printf("Key: %v , value: %v\n", key, val)
-	//		}
-	//	}
+	for _, tokenString := range dup_map {
+		tokenString := strconv.Itoa(tokenString)
+		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+			return []byte(tokenString), nil
+		})
+		fmt.Println(tokenString)
+		for key, val := range claims {
+			fmt.Printf("Key: %v , value: %v\n", key, val)
+		}
+	}
 
 }
 
