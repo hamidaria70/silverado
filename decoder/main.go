@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/dgrijalva/jwt-go"
+	//"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis"
 )
 
 func main() {
-	claims := jwt.MapClaims{}
+	//claims := jwt.MapClaims{}
 	tokenSlice := []string{}
 	values := []string{}
 
@@ -39,14 +39,32 @@ func main() {
 		tokenSlice = append(tokenSlice, strings.Trim(strings.TrimSpace(strings.Split(element, "Bearer")[1]), "\"}"))
 	}
 
-	for _, tokenString := range tokenSlice {
-		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte(tokenString), nil
-		})
-		fmt.Println(tokenString)
-		for key, val := range claims {
-			fmt.Printf("Key: %v , value: %v\n", key, val)
+	dup_map := duplicateCount(tokenSlice)
+
+	fmt.Println(dup_map)
+	//	for _, tokenString := range tokenSlice {
+	//		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+	//			return []byte(tokenString), nil
+	//		})
+	//		fmt.Println(tokenString)
+	//		for key, val := range claims {
+	//			fmt.Printf("Key: %v , value: %v\n", key, val)
+	//		}
+	//	}
+
+}
+
+func duplicateCount(tokenSlice []string) map[string]int {
+
+	tokenCount := make(map[string]int)
+	for _, item := range tokenSlice {
+		_, exist := tokenCount[item]
+
+		if exist {
+			tokenCount[item] += 1
+		} else {
+			tokenCount[item] = 1
 		}
 	}
-
+	return tokenCount
 }
