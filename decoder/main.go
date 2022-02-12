@@ -2,18 +2,11 @@ package main
 
 import (
 	"fmt"
-	"strconv"
-	//	"strconv"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis"
 )
-
-//type RedisData struct {
-//	authToken string
-//	countToken int
-//}
 
 func main() {
 	claims := jwt.MapClaims{}
@@ -47,10 +40,7 @@ func main() {
 	}
 
 	dup_map := duplicateCount(tokenSlice)
-
-	fmt.Println(dup_map)
-	for _, tokenString := range dup_map {
-		tokenString := strconv.Itoa(tokenString)
+	for tokenString, count := range dup_map {
 		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(tokenString), nil
 		})
@@ -58,19 +48,15 @@ func main() {
 		for key, val := range claims {
 			fmt.Printf("Key: %v , value: %v\n", key, val)
 		}
+		fmt.Printf("key: count , value: %v\n", count)
 	}
 
 }
 
 func duplicateCount(tokenSlice []string) map[string]int {
 
-	//var redisData = []RedisData{
-	//authToken, RedisData{}
-	//}
-
 	tokenCount := make(map[string]int)
 	for _, item := range tokenSlice {
-		//		redisData.authToken = item
 		_, exist := tokenCount[item]
 
 		if exist {
