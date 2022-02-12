@@ -15,7 +15,7 @@ func ContainToken(keyValues []string) []string {
 		}
 	}
 
-	fmt.Printf("The length of values slice is %d.\n\n", len(authValues))
+	fmt.Printf("\nThe length of values slice is %d.\n\n", len(authValues))
 	return authValues
 }
 
