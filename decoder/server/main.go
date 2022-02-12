@@ -12,7 +12,7 @@ func GetValues(client *redis.Client) []string {
 	if err != nil {
 		fmt.Println("OPS!!!", err)
 	}
-	fmt.Printf("The length of keyValues slice is %d.\n", len(keyValues))
+	fmt.Printf("\nThe length of keyValues slice is %d.", len(keyValues))
 	return keyValues
 
 }
