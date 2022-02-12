@@ -9,38 +9,16 @@ import (
 )
 
 func main() {
+
 	claims := jwt.MapClaims{}
-	tokenSlice := []string{}
-	values := []string{}
 
-	fmt.Println("Go Redis Tutorial")
+	client := redisConnection()
+	keyValues := getValues(client)
+	authValues := containToken(keyValues)
+	tokenSlice := tokenCatcher(authValues)
+	countOfToken := duplicateCount(tokenSlice)
 
-	client := redis.NewClient(&redis.Options{
-		Addr: "192.168.1.90:6379",
-	})
-
-	pong, err := client.Ping().Result()
-	fmt.Println(pong, err)
-
-	val, err := client.LRange("test", 0, -1).Result()
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	for _, value := range val {
-		if strings.Contains(value, "Authorization") && !strings.Contains(value, "Authorization=-") {
-			values = append(values, value)
-		}
-	}
-
-	fmt.Printf("The length of val slice is %d.\n", len(val))
-	fmt.Printf("The length of values slice is %d.\n", len(values))
-	for _, element := range values {
-		tokenSlice = append(tokenSlice, strings.Trim(strings.TrimSpace(strings.Split(element, "Bearer")[1]), "\"}"))
-	}
-
-	dup_map := duplicateCount(tokenSlice)
-	for tokenString, count := range dup_map {
+	for tokenString, count := range countOfToken {
 		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(tokenString), nil
 		})
@@ -55,15 +33,67 @@ func main() {
 
 func duplicateCount(tokenSlice []string) map[string]int {
 
-	tokenCount := make(map[string]int)
+	countOfToken := make(map[string]int)
 	for _, item := range tokenSlice {
-		_, exist := tokenCount[item]
+		_, exist := countOfToken[item]
 
 		if exist {
-			tokenCount[item] += 1
+			countOfToken[item] += 1
 		} else {
-			tokenCount[item] = 1
+			countOfToken[item] = 1
 		}
 	}
-	return tokenCount
+	return countOfToken
+}
+
+func redisConnection() *redis.Client {
+
+	fmt.Print("Checking Redis Connection: PING --> ")
+
+	client := redis.NewClient(&redis.Options{
+		Addr: "192.168.1.90:6379",
+	})
+
+	pong, err := client.Ping().Result()
+	fmt.Print(pong)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	return client
+}
+
+func getValues(client *redis.Client) []string {
+
+	keyValues, err := client.LRange("test", 0, -1).Result()
+	if err != nil {
+		fmt.Println("OPS!!!", err)
+	}
+	fmt.Printf("The length of keyValues slice is %d.\n", len(keyValues))
+	return keyValues
+
+}
+
+func containToken(keyValues []string) []string {
+
+	authValues := []string{}
+
+	for _, value := range keyValues {
+		if strings.Contains(value, "Authorization") && !strings.Contains(value, "Authorization=-") {
+			authValues = append(authValues, value)
+		}
+	}
+
+	fmt.Printf("The length of values slice is %d.\n", len(authValues))
+	return authValues
+}
+
+func tokenCatcher(authValues []string) []string {
+
+	tokenSlice := []string{}
+
+	for _, element := range authValues {
+		tokenSlice = append(tokenSlice, strings.Trim(strings.TrimSpace(strings.Split(element, "Bearer")[1]), "\"}"))
+	}
+	return tokenSlice
 }
