@@ -10,10 +10,14 @@ import (
 
 func main() {
 
+	redisIp := "192.168.1.90"
+	redisPort := "6379"
+	redisKey := "test"
+
 	claims := jwt.MapClaims{}
 
-	client := server.RedisConnection()
-	keyValues := server.GetValues(client)
+	client := server.RedisConnection(redisIp, redisPort)
+	keyValues := server.GetValues(client, redisKey)
 	authValues := creator.ContainToken(keyValues)
 	tokenSlice := creator.TokenCatcher(authValues)
 	countOfToken := creator.SimilarCount(tokenSlice)

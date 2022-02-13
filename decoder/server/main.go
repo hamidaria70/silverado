@@ -7,9 +7,9 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func GetValues(client *redis.Client) []string {
+func GetValues(client *redis.Client, redisKey string) []string {
 
-	keyValues, err := client.LRange("test", 0, -1).Result()
+	keyValues, err := client.LRange(redisKey, 0, -1).Result()
 	if err != nil {
 		fmt.Println("OPS!!!", err)
 	}
@@ -18,12 +18,14 @@ func GetValues(client *redis.Client) []string {
 
 }
 
-func RedisConnection() *redis.Client {
+func RedisConnection(redisIp string, redisPort string) *redis.Client {
+
+	redisAddress := fmt.Sprintf("%v:%v", redisIp, redisPort)
 
 	fmt.Print("Checking Redis Connection: PING --> ")
 
 	client := redis.NewClient(&redis.Options{
-		Addr: "192.168.1.90:6379",
+		Addr: redisAddress,
 	})
 
 	pong, err := client.Ping().Result()
