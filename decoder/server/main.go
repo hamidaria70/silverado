@@ -17,7 +17,7 @@ func GetValues(client *redis.Client) []string {
 
 }
 
-func RedisConnection() *redis.Client {
+func RedisConnection() (*redis.Client, error) {
 
 	fmt.Print("Checking Redis Connection: PING --> ")
 
@@ -31,5 +31,5 @@ func RedisConnection() *redis.Client {
 	if err != nil {
 		fmt.Println(err)
 	}
-	return client
+	return client, err
 }

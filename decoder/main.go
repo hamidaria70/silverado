@@ -4,6 +4,7 @@ import (
 	"decoder/creator"
 	"decoder/server"
 	"fmt"
+	"os"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -12,7 +13,11 @@ func main() {
 
 	claims := jwt.MapClaims{}
 
-	client := server.RedisConnection()
+	client, err := server.RedisConnection()
+	if err != nil {
+		os.Exit(1)
+	}
+
 	keyValues := server.GetValues(client)
 	authValues := creator.ContainToken(keyValues)
 	tokenSlice := creator.TokenCatcher(authValues)
