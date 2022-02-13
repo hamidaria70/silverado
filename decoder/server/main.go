@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/go-redis/redis"
 )
@@ -17,7 +18,7 @@ func GetValues(client *redis.Client) []string {
 
 }
 
-func RedisConnection() (*redis.Client, error) {
+func RedisConnection() *redis.Client {
 
 	fmt.Print("Checking Redis Connection: PING --> ")
 
@@ -30,6 +31,7 @@ func RedisConnection() (*redis.Client, error) {
 
 	if err != nil {
 		fmt.Println(err)
+		os.Exit(1)
 	}
-	return client, err
+	return client
 }
