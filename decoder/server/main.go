@@ -18,7 +18,7 @@ func GetValues(client *redis.Client, redisKey string) []string {
 
 }
 
-func RedisConnection(redisIp string, redisPort string) *redis.Client {
+func RedisConnection(redisIp string, redisPort int) *redis.Client {
 
 	redisAddress := fmt.Sprintf("%v:%v", redisIp, redisPort)
 

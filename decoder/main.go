@@ -3,6 +3,7 @@ package main
 import (
 	"decoder/creator"
 	"decoder/server"
+	"flag"
 	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
@@ -10,14 +11,15 @@ import (
 
 func main() {
 
-	redisIp := "192.168.1.90"
-	redisPort := "6379"
-	redisKey := "test"
+	redisIp := flag.String("a", "", "IP or address of redis server")
+	redisPort := flag.Int("p", 6379, "redis port , the default is 6379")
+	redisKey := flag.String("k", "test", "key is redis database")
+	flag.Parse()
 
 	claims := jwt.MapClaims{}
 
-	client := server.RedisConnection(redisIp, redisPort)
-	keyValues := server.GetValues(client, redisKey)
+	client := server.RedisConnection(*redisIp, *redisPort)
+	keyValues := server.GetValues(client, *redisKey)
 	authValues := creator.ContainToken(keyValues)
 	tokenSlice := creator.TokenCatcher(authValues)
 	countOfToken := creator.SimilarCount(tokenSlice)
