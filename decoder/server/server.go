@@ -1,8 +1,8 @@
 package server
 
 import (
+	"decoder/errors"
 	"fmt"
-	"os"
 
 	"github.com/go-redis/redis"
 )
@@ -10,9 +10,7 @@ import (
 func GetValues(client *redis.Client, redisKey string) []string {
 
 	keyValues, err := client.LRange(redisKey, 0, -1).Result()
-	if err != nil {
-		fmt.Println("OPS!!!", err)
-	}
+	errors.ConnectionError(err)
 	fmt.Printf("\nThe length of keyValues slice is %d.", len(keyValues))
 	return keyValues
 
@@ -30,10 +28,7 @@ func RedisConnection(redisIp string, redisPort int) *redis.Client {
 
 	pong, err := client.Ping().Result()
 	fmt.Print(pong)
+	errors.ConnectionError(err)
 
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 	return client
 }
