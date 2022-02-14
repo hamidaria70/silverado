@@ -3,8 +3,11 @@ package main
 import (
 	"decoder/creator"
 	"decoder/server"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"sort"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -25,14 +28,28 @@ func main() {
 	countOfToken := creator.SimilarCount(tokenSlice)
 
 	for tokenString, count := range countOfToken {
+		var dataMap map[string]interface{}
 		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(tokenString), nil
 		})
-		fmt.Printf("%v\n", tokenString)
-		for key, val := range claims {
-			fmt.Printf("Key: %v , value: %v\n", key, val)
+		jsonString, err := json.Marshal(claims)
+		if err != nil {
+			fmt.Println(err)
 		}
-		fmt.Printf("key: count , value: %v\n\n", count)
-	}
+		err = json.Unmarshal(jsonString, &dataMap)
+		dataMap["count"] = count
+		dataMap["token"] = tokenString
 
+		fmt.Println()
+
+		keys := make([]string, 0, len(dataMap))
+		for key := range dataMap {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			upperCaseKey := fmt.Sprintf(strings.Title(key))
+			fmt.Printf("%v: %v\n", upperCaseKey, dataMap[key])
+		}
+	}
 }
