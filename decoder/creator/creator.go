@@ -1,7 +1,6 @@
 package creator
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -15,7 +14,6 @@ func ContainToken(keyValues []string) []string {
 		}
 	}
 
-	fmt.Printf("\nThe length of values slice is %d.\n\n", len(authValues))
 	return authValues
 }
 

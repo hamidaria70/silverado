@@ -22,6 +22,7 @@ func main() {
 	claims := jwt.MapClaims{}
 
 	client := server.RedisConnection(*redisIp, *redisPort)
+	fmt.Println()
 	keyValues := server.GetValues(client, *redisKey)
 	authValues := creator.ContainToken(keyValues)
 	tokenSlice := creator.TokenCatcher(authValues)

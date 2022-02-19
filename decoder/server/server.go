@@ -11,7 +11,6 @@ func GetValues(client *redis.Client, redisKey string) []string {
 
 	keyValues, err := client.LRange(redisKey, 0, -1).Result()
 	errors.ConnectionError(err)
-	fmt.Printf("\nThe length of keyValues slice is %d.", len(keyValues))
 	return keyValues
 
 }
