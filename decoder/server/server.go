@@ -16,18 +16,16 @@ func GetValues(client *redis.Client, redisKey string) []string {
 }
 
 func RedisConnection(redisIp string, redisPort int) *redis.Client {
-
+	
 	redisAddress := fmt.Sprintf("%v:%v", redisIp, redisPort)
-
-	fmt.Print("Checking Redis Connection: PING --> ")
-
 	client := redis.NewClient(&redis.Options{
 		Addr: redisAddress,
 	})
 
 	pong, err := client.Ping().Result()
-	fmt.Print(pong)
+	if pong != "pong" {
 	errors.ConnectionError(err)
+	}
 
 	return client
 }

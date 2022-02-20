@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis"
@@ -20,6 +21,7 @@ func main() {
 	tokenSlice := []string{}
 	countOfToken := map[string]int{}
 	claims := jwt.MapClaims{}
+	duration := time.Duration(1) * time.Second
 
 	redisIp := flag.String("a", "", "IP or address of redis server")
 	redisPort := flag.Int("p", 6379, "redis port , the default is 6379")
@@ -27,7 +29,6 @@ func main() {
 	flag.Parse()
 	for {
 		client = server.RedisConnection(*redisIp, *redisPort)
-		fmt.Println()
 		keyValues = server.GetValues(client, *redisKey)
 		authValues = creator.ContainToken(keyValues)
 		tokenSlice = creator.TokenCatcher(authValues)
@@ -55,8 +56,9 @@ func main() {
 			sort.Strings(keys)
 			for _, key := range keys {
 				upperCaseKey := fmt.Sprintf(strings.Title(key))
-				fmt.Printf("%v: %v\n", upperCaseKey, dataMap[key])
+				fmt.Printf("\r%v: %v\n", upperCaseKey, dataMap[key])
 			}
 		}
+		time.Sleep(duration)
 	}
 }
