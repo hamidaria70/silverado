@@ -6,14 +6,15 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"time"
-	"strings"
 	"sort"
+	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
 type dataMapSlice []map[string]interface{}
+type dataMapToken []map[string]interface{}
 
 func main() {
 	claims := jwt.MapClaims{}
@@ -22,7 +23,7 @@ func main() {
 	redisPort := flag.Int("p", 6379, "redis port , the default is 6379")
 	redisKey := flag.String("k", "test", "key is redis database")
 	flag.Parse()
-	
+
 	client := server.RedisConnection(*redisIp, *redisPort)
 	keyValues := server.GetValues(client, *redisKey)
 	authValues := creator.ContainToken(keyValues)
@@ -31,8 +32,10 @@ func main() {
 	duration := time.Duration(1) * time.Second
 
 	var data dataMapSlice
+	var token dataMapToken
 	for tokenString, count := range countOfToken {
 		var dataMap map[string]interface{}
+		var dataToken map[string]interface{}
 		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(tokenString), nil
 		})
@@ -43,8 +46,12 @@ func main() {
 		err = json.Unmarshal(jsonString, &dataMap)
 		dataMap["count"] = count
 		dataMap["token"] = tokenString
-
 		data = append(data, dataMap)
+		fmt.Println()
+
+		dataToken["id"] = dataMap["id"]
+		dataToken["token"] = tokenString
+		token = append(token, dataToken)
 		fmt.Println()
 
 		keys := make([]string, 0, len(dataMap))
@@ -57,6 +64,10 @@ func main() {
 			fmt.Printf("\r%v: %v\n", upperCaseKey, dataMap[key])
 		}
 	}
+	fmt.Println("******************************************")
 	fmt.Println(data)
+	fmt.Println("******************************************")
+	fmt.Println(token)
+	fmt.Println("******************************************")
 	time.Sleep(duration)
 }
