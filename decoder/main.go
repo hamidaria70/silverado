@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"sort"
-	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -48,16 +46,18 @@ func main() {
 			dataMap["token"] = tokenString
 
 			fmt.Println()
+			fmt.Println(dataMap)
+			fmt.Println()
 
-			keys := make([]string, 0, len(dataMap))
-			for key := range dataMap {
-				keys = append(keys, key)
-			}
-			sort.Strings(keys)
-			for _, key := range keys {
-				upperCaseKey := fmt.Sprintf(strings.Title(key))
-				fmt.Printf("\r%v: %v\n", upperCaseKey, dataMap[key])
-			}
+			//keys := make([]string, 0, len(dataMap))
+			//for key := range dataMap {
+			//keys = append(keys, key)
+			//}
+			//sort.Strings(keys)
+			//for _, key := range keys {
+			//upperCaseKey := fmt.Sprintf(strings.Title(key))
+			//fmt.Printf("\r%v: %v\n", upperCaseKey, dataMap[key])
+			//}
 		}
 		time.Sleep(duration)
 	}
