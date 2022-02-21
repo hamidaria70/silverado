@@ -12,6 +12,8 @@ import (
 	"github.com/go-redis/redis"
 )
 
+type dataMapSlice []map[string]interface{}
+
 func main() {
 	var client *redis.Client
 	keyValues := []string{}
@@ -33,6 +35,7 @@ func main() {
 		countOfToken = creator.SimilarCount(tokenSlice)
 
 		for tokenString, count := range countOfToken {
+			var data dataMapSlice
 			var dataMap map[string]interface{}
 			jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 				return []byte(tokenString), nil
@@ -45,6 +48,9 @@ func main() {
 			dataMap["count"] = count
 			dataMap["token"] = tokenString
 
+			data = append(data, dataMap)
+			fmt.Println()
+			fmt.Println(data)
 			fmt.Println()
 			fmt.Println(dataMap)
 			fmt.Println()
