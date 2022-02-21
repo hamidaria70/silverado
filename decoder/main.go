@@ -34,8 +34,8 @@ func main() {
 	var data dataMapSlice
 	var token dataMapToken
 	for tokenString, count := range countOfToken {
-		var dataMap map[string]interface{}
-		var dataToken map[string]interface{}
+		dataMap := make(map[string]interface{})
+		dataToken := make(map[string]interface{})
 		jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(tokenString), nil
 		})
