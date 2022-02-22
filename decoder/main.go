@@ -16,7 +16,7 @@ import (
 
 type dataMapSlice []map[string]interface{}
 type dataMapToken []map[string]interface{}
-type SimilarId []map[string][]string
+type SimilarId []map[string]interface{}
 
 func main() {
 	claims := jwt.MapClaims{}
@@ -76,9 +76,14 @@ func main() {
 	time.Sleep(duration)
 
 	var idToken SimilarId
-	for id, token := range token {
-		fmt.Println(id)
-		fmt.Println(token)
+	for _, token := range token {
+
+		idTokenMap := make(map[string]interface{})
+
+		fmt.Println(token["id"])
+		fmt.Println(token["token"])
 		fmt.Println(idToken)
+		idTokenMap["ID"] = token["id"]
+		idToken = append(idToken, idTokenMap)
 	}
 }
