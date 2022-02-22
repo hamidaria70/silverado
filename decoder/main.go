@@ -49,7 +49,7 @@ func main() {
 		err = json.Unmarshal(jsonString, &dataMap)
 		dataMap["count"] = count
 		dataMap["token"] = tokenString
-		dataMap["percentage"] = countPercentage
+		dataMap["percentage"] = fmt.Sprintf("%.2f", countPercentage)
 		data = append(data, dataMap)
 		fmt.Println()
 
@@ -69,7 +69,7 @@ func main() {
 		}
 		perCent = perCent + countPercentage
 	}
-	fmt.Println(perCent)
+	fmt.Printf("%.2f", perCent)
 	fmt.Println("******************************************")
 	fmt.Println(data)
 	fmt.Println("******************************************")
