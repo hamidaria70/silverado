@@ -16,6 +16,7 @@ import (
 
 type dataMapSlice []map[string]interface{}
 type dataMapToken []map[string]interface{}
+type SimilarId []map[string][]string
 
 func main() {
 	claims := jwt.MapClaims{}
@@ -69,11 +70,15 @@ func main() {
 		}
 		perCent = perCent + countPercentage
 	}
-	fmt.Printf("%.2f", perCent)
-	fmt.Println("******************************************")
-	fmt.Println(data)
 	fmt.Println("******************************************")
 	fmt.Println(token)
 	fmt.Println("******************************************")
 	time.Sleep(duration)
+
+	var idToken SimilarId
+	for id, token := range token {
+		fmt.Println(id)
+		fmt.Println(token)
+		fmt.Println(idToken)
+	}
 }
