@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dariubs/percent"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -43,9 +44,11 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
+		countPercentage := percent.Percent(count, len(tokenSlice))
 		err = json.Unmarshal(jsonString, &dataMap)
 		dataMap["count"] = count
 		dataMap["token"] = tokenString
+		dataMap["percentage"] = countPercentage
 		data = append(data, dataMap)
 		fmt.Println()
 
