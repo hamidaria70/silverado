@@ -34,6 +34,7 @@ func main() {
 
 	var data dataMapSlice
 	var token dataMapToken
+	var perCent float64
 	for tokenString, count := range countOfToken {
 		dataMap := make(map[string]interface{})
 		dataToken := make(map[string]interface{})
@@ -44,7 +45,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		countPercentage := percent.Percent(count, len(tokenSlice))
+		countPercentage := percent.PercentOf(count, len(tokenSlice))
 		err = json.Unmarshal(jsonString, &dataMap)
 		dataMap["count"] = count
 		dataMap["token"] = tokenString
@@ -66,7 +67,9 @@ func main() {
 			upperCaseKey := fmt.Sprintf(strings.Title(key))
 			fmt.Printf("\r%v: %v\n", upperCaseKey, dataMap[key])
 		}
+		perCent = perCent + countPercentage
 	}
+	fmt.Println(perCent)
 	fmt.Println("******************************************")
 	fmt.Println(data)
 	fmt.Println("******************************************")
