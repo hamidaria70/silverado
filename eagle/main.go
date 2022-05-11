@@ -12,7 +12,9 @@ import (
 
 	"code.cloudfoundry.org/bytefmt"
 	"github.com/mackerelio/go-osstat/cpu"
+	"github.com/mackerelio/go-osstat/loadavg"
 	"github.com/mackerelio/go-osstat/memory"
+	"github.com/mackerelio/go-osstat/uptime"
 )
 
 func checkError(err error) {
@@ -66,9 +68,26 @@ func cpuUsage() {
 		return
 	}
 	total := float64(after.Total - before.Total)
+
 	fmt.Printf("cpu user: %f %%\n", float64(after.User-before.User)/total*100)
 	fmt.Printf("cpu system: %f %%\n", float64(after.System-before.System)/total*100)
 	fmt.Printf("cpu idle: %f %%\n", float64(after.Idle-before.Idle)/total*100)
+}
+
+func loadAvarage() {
+	load1, err := loadavg.Get()
+	checkError(err)
+
+	fmt.Printf("load1 : %f\n", float64(load1.Loadavg1))
+	fmt.Printf("load5 : %f\n", float64(load1.Loadavg5))
+	fmt.Printf("load15 : %f\n", float64(load1.Loadavg15))
+}
+
+func upTime() {
+	uptime, err := uptime.Get()
+	checkError(err)
+
+	fmt.Println(uptime)
 }
 
 func main() {
@@ -76,4 +95,7 @@ func main() {
 	sshConnect()
 	memoryUsage()
 	cpuUsage()
+	loadAvarage()
+	upTime()
+
 }
