@@ -43,69 +43,76 @@ func readSshConfig() {
 	fmt.Println(string(file))
 }
 
-func memoryUsage() {
+func memoryUsage() (string, uint64) {
 	memory, err := memory.Get()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
-		return
 	}
 
-	fmt.Printf("memory total: %v\n", bytefmt.ByteSize(memory.Total))
-	fmt.Printf("memory used: %v bytes\n", bytefmt.ByteSize(memory.Used))
-	fmt.Printf("memory cached: %v bytes\n", bytefmt.ByteSize(memory.Cached))
-	fmt.Printf("memory free: %v bytes\n", bytefmt.ByteSize(memory.Free))
+	totalMemory := bytefmt.ByteSize(memory.Total)
+	percentageMemory := memory.Used * 100 / memory.Total
+
+	return totalMemory, percentageMemory
 }
 
-func cpuUsage() {
+func cpuUsage() float64 {
 	before, err := cpu.Get()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
-		return
 	}
 	time.Sleep(time.Duration(1) * time.Second)
 	after, err := cpu.Get()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
-		return
 	}
 	total := float64(after.Total - before.Total)
 
-	fmt.Printf("cpu user: %f %%\n", float64(after.User-before.User)/total*100)
-	fmt.Printf("cpu system: %f %%\n", float64(after.System-before.System)/total*100)
-	fmt.Printf("cpu idle: %f %%\n", float64(after.Idle-before.Idle)/total*100)
+	percentageCpu := 100 - float64(after.Idle-before.Idle)/total*100
+
+	return percentageCpu
 }
 
-func loadAvarage() {
-	load1, err := loadavg.Get()
+func loadAvarage() (float64, float64, float64) {
+	load, err := loadavg.Get()
 	checkError(err)
 
-	fmt.Printf("load1 : %f\n", float64(load1.Loadavg1))
-	fmt.Printf("load5 : %f\n", float64(load1.Loadavg5))
-	fmt.Printf("load15 : %f\n", float64(load1.Loadavg15))
+	loadAverage1 := float64(load.Loadavg1)
+	loadAverage5 := float64(load.Loadavg5)
+	loadAverage15 := float64(load.Loadavg15)
+
+	return loadAverage1, loadAverage5, loadAverage15
 }
 
-func upTime() {
+func upTime() time.Duration {
 	uptime, err := uptime.Get()
 	checkError(err)
 
-	fmt.Println(uptime)
+	fmt.Printf("System uptime is %v: \n", uptime)
+	return uptime
 }
 
-func diskUsage() {
+func diskUsage() (string, string) {
 	usage := du.NewDiskUsage(".")
-	fmt.Println("Free:", bytefmt.ByteSize(usage.Free()))
-	fmt.Println("Available:", bytefmt.ByteSize(usage.Available()))
-	fmt.Println("Size:", bytefmt.ByteSize(usage.Size()))
-	fmt.Println("Used:", bytefmt.ByteSize(usage.Used()))
-	fmt.Println("Usage:", usage.Usage()*100, "%")
+	diskSize := bytefmt.ByteSize(usage.Size())
+	percentageDisk := fmt.Sprintf("%v", usage.Usage()*100)
+
+	return diskSize, percentageDisk
 }
 
 func main() {
 	readSshConfig()
 	sshConnect()
-	memoryUsage()
-	cpuUsage()
-	loadAvarage()
-	upTime()
-	diskUsage()
+	totalmemory, percentagememory := memoryUsage()
+	percentagecpu := cpuUsage()
+	loadaverage1, loadaverage5, loadaverage15 := loadAvarage()
+	uptime := upTime()
+	disksize, percentagedisk := diskUsage()
+
+	fmt.Printf("\nSystem uptime is: %v\n", uptime)
+	fmt.Printf("\nMemory usage percentage is %v %% out of %v GB\n", percentagememory, totalmemory)
+	fmt.Printf("\nCPU usage percentage is %v %%\n", percentagecpu)
+	fmt.Printf("\nLoad Avagerate for last minute is %v\n", loadaverage1)
+	fmt.Printf("Load Avagerate for last 5 minutes is %v\n", loadaverage5)
+	fmt.Printf("Load Avagerate for last 15 minutes is %v\n", loadaverage15)
+	fmt.Printf("\nDisk usage percentage is %v %% out of %v GB\n", percentagedisk, disksize)
 }
