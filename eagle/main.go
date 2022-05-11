@@ -15,6 +15,7 @@ import (
 	"github.com/mackerelio/go-osstat/loadavg"
 	"github.com/mackerelio/go-osstat/memory"
 	"github.com/mackerelio/go-osstat/uptime"
+	"github.com/ricochet2200/go-disk-usage/du"
 )
 
 func checkError(err error) {
@@ -90,6 +91,15 @@ func upTime() {
 	fmt.Println(uptime)
 }
 
+func diskUsage() {
+	usage := du.NewDiskUsage(".")
+	fmt.Println("Free:", bytefmt.ByteSize(usage.Free()))
+	fmt.Println("Available:", bytefmt.ByteSize(usage.Available()))
+	fmt.Println("Size:", bytefmt.ByteSize(usage.Size()))
+	fmt.Println("Used:", bytefmt.ByteSize(usage.Used()))
+	fmt.Println("Usage:", usage.Usage()*100, "%")
+}
+
 func main() {
 	readSshConfig()
 	sshConnect()
@@ -97,5 +107,5 @@ func main() {
 	cpuUsage()
 	loadAvarage()
 	upTime()
-
+	diskUsage()
 }
