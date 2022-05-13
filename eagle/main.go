@@ -81,9 +81,6 @@ func diskUsage() (string, string) {
 func markdownGenerator(hostname string, ip, uptime string, percentagecpu string, percentagedisk string,
 	disksize string, totalmemory string, percentagememory string,
 	loadavarage1 string, loadaverage5 string, loadaverage15 string) {
-	percentagecpu = fmt.Sprintf("%v %%", percentagecpu)
-	percentagedisk = fmt.Sprintf("%v %% usage out of %vGB", percentagedisk, disksize)
-	percentagememory = fmt.Sprintf("%v %% usage out of %vGB", percentagememory, totalmemory)
 	basicTable, _ := markdown.NewTableFormatterBuilder().
 		WithPrettyPrint().
 		Build("Hostname", "IP Address", "Up Time", "CPU Usage Percentage", "Disk Usage Percentage",
