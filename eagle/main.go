@@ -78,14 +78,18 @@ func diskUsage() (string, string) {
 	return diskSize, percentageDisk
 }
 
-func markdownGenerator(hostname string, uptime string, percentagecpu string, percentagedisk string,
-	percentagememory string, loadavarage1 string, loadaverage5 string, loadaverage15 string) {
+func markdownGenerator(hostname string, ip, uptime string, percentagecpu string, percentagedisk string,
+	disksize string, totalmemory string, percentagememory string,
+	loadavarage1 string, loadaverage5 string, loadaverage15 string) {
+	percentagecpu = fmt.Sprintf("%v %%", percentagecpu)
+	percentagedisk = fmt.Sprintf("%v %% usage out of %vGB", percentagedisk, disksize)
+	percentagememory = fmt.Sprintf("%v %% usage out of %vGB", percentagememory, totalmemory)
 	basicTable, _ := markdown.NewTableFormatterBuilder().
 		WithPrettyPrint().
-		Build("Hostname", "Up Time", "CPU Usage Percentage", "Disk Usage Percentage",
+		Build("Hostname", "IP Address", "Up Time", "CPU Usage Percentage", "Disk Usage Percentage",
 			"Memory Usage Percentage", "Load Average 1", "Load Average 5", "Load average 15").
 		Format([][]string{
-			{hostname, uptime, percentagecpu, percentagedisk, percentagememory, loadavarage1, loadaverage5, loadaverage15},
+			{hostname, ip, uptime, percentagecpu, percentagedisk, percentagememory, loadavarage1, loadaverage5, loadaverage15},
 		})
 	fmt.Print(basicTable)
 }
@@ -101,6 +105,18 @@ func getIp() *net.UDPAddr {
 	return ipAddress
 }
 
+func GetOutboundIP() net.IP {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP
+}
+
 func main() {
 	totalmemory, percentagememory := memoryUsage()
 	percentagecpu := cpuUsage()
@@ -108,16 +124,8 @@ func main() {
 	uptime := upTime().String()
 	disksize, percentagedisk := diskUsage()
 	hostname, _ := os.Hostname()
+	ip := GetOutboundIP().String()
 
-	fmt.Printf("\nSystem uptime is: %v\n", uptime)
-	fmt.Printf("\nHostname is: %v\n", hostname)
-	fmt.Printf("\nMemory usage percentage is %v %% out of %v GB\n", percentagememory, totalmemory)
-	fmt.Printf("\nCPU usage percentage is %v %%\n", percentagecpu)
-	fmt.Printf("\nLoad Avagerate for last minute is %v\n", loadaverage1)
-	fmt.Printf("Load Avagerate for last 5 minutes is %v\n", loadaverage5)
-	fmt.Printf("Load Avagerate for last 15 minutes is %v\n", loadaverage15)
-	fmt.Printf("\nDisk usage percentage is %v %% out of %v GB\n\n", percentagedisk, disksize)
-
-	markdownGenerator(hostname, uptime, percentagecpu, percentagedisk, percentagememory, loadaverage1, loadaverage5, loadaverage15)
-
+	markdownGenerator(hostname, ip, uptime, percentagecpu, percentagedisk, disksize,
+		percentagememory, totalmemory, loadaverage1, loadaverage5, loadaverage15)
 }
