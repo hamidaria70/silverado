@@ -3,3 +3,12 @@
     hosts: servers
     roles:
       - copy
+      - execute
+      - fetch
+      - cleanup-remote
+  - name: Host Markdown Generator
+    hosts: 127.0.0.1
+    connection: local
+    roles:
+      - merge
+      - cleanup-server
