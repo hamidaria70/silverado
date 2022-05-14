@@ -89,7 +89,7 @@ func markdownGenerator(hostname string, ip, uptime string, percentagecpu string,
 			{hostname, ip, uptime, percentagecpu, percentagedisk, percentagememory, loadavarage1, loadaverage5, loadaverage15},
 		})
 
-	f, err := os.Create(fmt.Sprintf("%v-data.md", ip))
+	f, err := os.Create("data.md")
 
 	if err != nil {
 		log.Fatal(err)
