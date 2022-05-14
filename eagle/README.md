@@ -14,7 +14,21 @@ To make a binary file of this project run the command below:
 go build --ldflags '-linkmode external -extldflags "-static"' .
 ```
 
-### To Use
+### To Use Locally
+
+To run `eagle` locally , you only need to run the command below:
+
+```bash
+./eagle
+```
+
+and to view result, run :
+
+```bash
+cat data.md
+```
+
+### To Use With Ansible
 
 1. Make sure that `ansible` is already installed on your host. If not , Run the
    commands below:
