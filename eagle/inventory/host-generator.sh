@@ -2,7 +2,7 @@
 
 set -e
 
-SERVERS=$(grep hostname ~/.ssh/config | cut -d " " -f 4 | head)
+SERVERS=$(grep hostname ~/.ssh/config | cut -d " " -f 4 )
 
 echo [servers] > ./inventory/hosts
 
