@@ -1,0 +1,5 @@
+---
+  - name: Copy eagle
+    hosts: servers
+    roles:
+      - copy
