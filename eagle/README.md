@@ -8,6 +8,9 @@ result of system overview by `ansible`.
 
 ### To Build
 
+First, make sure that `Go` is already installed on your system.If not check
+[here](https://go.dev/doc/install).
+
 To make a binary file of this project run the command below:
 
 ```bash
