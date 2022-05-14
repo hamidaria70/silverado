@@ -88,7 +88,21 @@ func markdownGenerator(hostname string, ip, uptime string, percentagecpu string,
 		Format([][]string{
 			{hostname, ip, uptime, percentagecpu, percentagedisk, percentagememory, loadavarage1, loadaverage5, loadaverage15},
 		})
-	fmt.Print(basicTable)
+
+	f, err := os.Create(fmt.Sprintf("%v-data.md", ip))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+
+	_, err2 := f.WriteString(basicTable)
+
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+
 }
 
 func getIp() *net.UDPAddr {
