@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"runtime"
 	"strconv"
 	"time"
 
@@ -35,7 +36,7 @@ func memoryUsage() (string, string) {
 	return totalMemory, percentageMemory
 }
 
-func cpuUsage() string {
+func cpuUsage() (string, string) {
 	before, err := cpu.Get()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
@@ -48,8 +49,9 @@ func cpuUsage() string {
 	total := float64(after.Total - before.Total)
 
 	percentageCpu := fmt.Sprintf("%.2f", 100-float64(after.Idle-before.Idle)/total*100)
+	cpuCores := fmt.Sprintf("%v", runtime.NumCPU())
 
-	return percentageCpu
+	return percentageCpu, cpuCores
 }
 
 func loadAvarage() (string, string, string) {
@@ -78,9 +80,12 @@ func diskUsage() (string, string) {
 	return diskSize, percentageDisk
 }
 
-func markdownGenerator(hostname string, ip, uptime string, percentagecpu string, percentagedisk string,
-	disksize string, totalmemory string, percentagememory string,
+func markdownGenerator(hostname string, ip, uptime string, percentagecpu string, cpuCores string,
+	percentagedisk string, disksize string, percentagememory string, totalmemory string,
 	loadavarage1 string, loadaverage5 string, loadaverage15 string) {
+	percentagememory = fmt.Sprintf("%v %% out of %vGB", percentagememory, totalmemory)
+	percentagedisk = fmt.Sprintf("%v %% out of %vGB", percentagedisk, disksize)
+	percentagecpu = fmt.Sprintf("%v %% out of %v cores", percentagecpu, cpuCores)
 	basicTable, _ := markdown.NewTableFormatterBuilder().
 		WithPrettyPrint().
 		Build("Hostname", "IP Address", "Up Time", "CPU Usage Percentage", "Disk Usage Percentage",
@@ -105,17 +110,6 @@ func markdownGenerator(hostname string, ip, uptime string, percentagecpu string,
 
 }
 
-func getIp() *net.UDPAddr {
-	conn, error := net.Dial("udp", "8.8.8.8:80")
-	if error != nil {
-		fmt.Println(error)
-	}
-
-	defer conn.Close()
-	ipAddress := conn.LocalAddr().(*net.UDPAddr)
-	return ipAddress
-}
-
 func GetOutboundIP() net.IP {
 	conn, err := net.Dial("udp", "8.8.8.8:80")
 	if err != nil {
@@ -130,13 +124,13 @@ func GetOutboundIP() net.IP {
 
 func main() {
 	totalmemory, percentagememory := memoryUsage()
-	percentagecpu := cpuUsage()
+	percentagecpu, cpuCores := cpuUsage()
 	loadaverage1, loadaverage5, loadaverage15 := loadAvarage()
 	uptime := upTime().String()
 	disksize, percentagedisk := diskUsage()
 	hostname, _ := os.Hostname()
 	ip := GetOutboundIP().String()
 
-	markdownGenerator(hostname, ip, uptime, percentagecpu, percentagedisk, disksize,
+	markdownGenerator(hostname, ip, uptime, percentagecpu, cpuCores, percentagedisk, disksize,
 		percentagememory, totalmemory, loadaverage1, loadaverage5, loadaverage15)
 }
