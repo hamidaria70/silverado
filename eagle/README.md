@@ -3,8 +3,24 @@
 
 ### Introduction
 
-`Eagle` will be ran in each server that you can have ssh access and create a
-result of system overview by `ansible`.
+`Eagle` is a tool to get system/server parameters instead of running multiple
+commands, it will be ran in each system/server and create a `data.md` as an
+output.
+
+Parameters are:
+
+    * Hostname
+    * IP Address
+    * Count of CPU Cores
+    * Percentage of CPU Usage
+    * Total Memory
+    * Percentage of Memory Usage
+    * Disk Size
+    * Percentage of Disk Usage
+    * Load Average for last 1 , 5 and 15 minutes
+
+If there are lots of servers and you have access to them, also you can use
+`eagle` with help of `ansible` to gather an overview of them all.
 
 ### To Build
 
@@ -79,4 +95,3 @@ done.
 | Hostname | IP Address    | Up Time    | CPU Usage Percentage  | Disk Usage Percentage | Memory Usage Percentage | Load Average 1 | Load Average 5 | Load average 15 |
 | -------- | ------------- | ---------- | --------------------- | --------------------- | ----------------------- | -------------- | -------------- | --------------- |
 | office   | 192.168.1.116 | 119h45m38s | 5.34 % out of 8 cores | 66.62 % out of 109GGB | 30 % out of 15.5GGB     | 0.41           | 0.65           | 0.78            |
-
