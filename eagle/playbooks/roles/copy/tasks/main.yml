@@ -2,6 +2,6 @@
   copy:
     src: ../eagle
     dest: $HOME/eagle
-    owner: hamid
-    group: hamid
-    mode: '0755'
+    owner: '{{ user }}'
+    group: '{{ user }}'
+    mode: '0766'

@@ -1,6 +1,7 @@
 ---
   - name: Copy eagle
     hosts: servers
+    remote_user: '{{ user }}'
     roles:
       - copy
       - execute
