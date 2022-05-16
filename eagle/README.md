@@ -83,8 +83,11 @@ follow the structure and generate the host file in inventory directory.
 4. Last step to use eagle is to run:
 
 ```bash
-ansible-playbook -i inventory/hosts playbooks/eagle.yml
+ansible-playbook --extra-vars "user=<$USER_NAME>" -i inventory/hosts playbooks/eagle.yml
 ```
+
+**NOTE: `$USER_NAME` must be in hosts and you should have access it via ssh without
+password**
 
 5. And Finaly you can check the markdown view result in `result.md`
 
