@@ -6,4 +6,3 @@ Develop training using golang
 2. [Booking Application](booking-app)
 3. [Random Greetings](greetings)
 4. [Web Service With Gin](web-service-gin)
-5. [Eagle](eagle)
